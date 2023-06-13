@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "372363936392",
+    "project_id": "safari-rally-2023",
+    "storage_bucket": "safari-rally-2023.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:372363936392:android:15703ed19d3e1448a8953d",
+        "android_client_info": {
+          "package_name": "com.example.safarirally2023"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "372363936392-m77anaa6l9gs6p9n5sp9dnbj5dcq622j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCjRmIh_3bSs2kmfRKUUxOM7BBB9BSKuQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "372363936392-m77anaa6l9gs6p9n5sp9dnbj5dcq622j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
