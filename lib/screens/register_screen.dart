@@ -2,10 +2,11 @@ import 'dart:async';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/auth_provider.dart';
-import 'home_screen.dart';
+import 'main_screen.dart';
 import 'login_screen.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -298,6 +299,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ),
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
+                              EasyLoading.show(status: "Please Wait");
                               authData.registerUser(_emailTextController.text, _passwordTextController.text).then((credential){
                                 if(credential?.user?.uid != null){
                                   authData.saveUserDataToDb(
@@ -306,11 +308,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   ).then((value){
                                     setState(() {
                                       _formKey.currentState?.reset();
-
                                     });
-                                    Navigator.pushReplacementNamed(context, HomeScreen.id);
+                                    EasyLoading.showSuccess("Success", duration: const Duration(seconds: 3));
+                                    Navigator.pushReplacementNamed(context, MainScreen.id);
                                   });
                                 } else {
+                                  EasyLoading.dismiss();
                                   scaffoldMessage(authData.error);
                                   Navigator.pushReplacementNamed(context, RegisterScreen.id);
                                 }

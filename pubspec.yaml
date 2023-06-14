@@ -22,6 +22,9 @@ dependencies:
   image_picker:
   location:
   geolocator:
+  persistent_bottom_nav_bar:
+  flutter_timer_countdown:
+  cached_network_image: 
 
 dev_dependencies:
   flutter_test:

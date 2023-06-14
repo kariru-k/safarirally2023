@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:safarirally2023/screens/reset_password_screen.dart';
 import '../providers/auth_provider.dart';
 import '../services/firebase_services.dart';
-import 'home_screen.dart';
+import 'main_screen.dart';
 import 'register_screen.dart';
 
 
@@ -233,7 +233,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   authData.loginUser(_emailTextController.text, _passwordTextController.text).then((credential){
                                     if(credential != null){
                                       EasyLoading.showSuccess("Successfully logged in", duration: const Duration(seconds: 3)).then((value){
-                                        Navigator.pushReplacementNamed(context, HomeScreen.id);
+                                        Navigator.pushReplacementNamed(context, MainScreen.id);
                                       });
                                       } else {
                                         EasyLoading.showError(authData.error.toString(), duration: const Duration(seconds: 2));

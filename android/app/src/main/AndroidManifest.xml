@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="safarirally2023"
+        android:label="Safari Rally Environment Application"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

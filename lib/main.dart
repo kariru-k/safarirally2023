@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:safarirally2023/providers/auth_provider.dart';
-import 'package:safarirally2023/screens/home_screen.dart';
+import 'package:safarirally2023/screens/main_screen.dart';
 import 'package:safarirally2023/screens/login_screen.dart';
 import 'package:safarirally2023/screens/register_screen.dart';
 import 'package:safarirally2023/screens/splash_screen.dart';
@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       routes: {
         SplashScreen.id:(context) => const SplashScreen(),
-        HomeScreen.id:(context) => const HomeScreen(),
+        MainScreen.id:(context) => const MainScreen(),
         LoginScreen.id:(context) => const LoginScreen(),
         RegisterScreen.id:(context) => const RegisterScreen(),
         ResetPassword.id:(context) => const ResetPassword(),

@@ -147,12 +147,12 @@ class AuthProvider extends ChangeNotifier {
 
     DocumentReference users = FirebaseFirestore.instance
         .collection("users")
-        .doc(user?.uid);
+        .doc(emailaddress);
 
     users.set({
       'uid': user?.uid,
       'email': emailaddress,
-      'location': GeoPoint(userLatitude!, userLongitude!),
+      'location': GeoPoint(userLatitude != null ? userLatitude! : 0.0, userLongitude != null ? userLongitude! : 0.0),
       'name': name
     });
 
