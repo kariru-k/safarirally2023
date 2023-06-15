@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
@@ -34,27 +33,6 @@ class _MapSelectionWidgetState extends State<MapSelectionWidget> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8.0),
-                      child: SizedBox(
-                          height: 30,
-                          child: Image.asset("images/map2.gif")
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Text(
-                        "Stage Maps",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 18
-                        ),
-                      ),
-                    )
-                  ],
-                ),
                 Flexible(
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -71,6 +49,7 @@ class _MapSelectionWidgetState extends State<MapSelectionWidget> {
                                 SizedBox(
                                   height: 200,
                                   child: Card(
+                                    elevation: 8,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(4.0),
                                         child: Image.network(

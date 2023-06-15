@@ -24,7 +24,8 @@ dependencies:
   geolocator:
   persistent_bottom_nav_bar:
   flutter_timer_countdown:
-  cached_network_image: 
+  cached_network_image:
+  table_calendar:
 
 dev_dependencies:
   flutter_test:
