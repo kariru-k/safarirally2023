@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:safarirally2023/services/timer_services.dart';
 import 'package:safarirally2023/widgets/map_selection_widget.dart';
 import 'package:safarirally2023/widgets/schedule_widget.dart';
 
@@ -14,7 +13,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TimerServices timerServices = TimerServices();
   final List _colors = [
     Colors.lightBlueAccent,
     Colors.lightGreenAccent,

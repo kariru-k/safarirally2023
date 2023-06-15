@@ -3,6 +3,10 @@
         android:label="Safari Rally Environment Application"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBCjRmIh_3bSs2kmfRKUUxOM7BBB9BSKuQ"/>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"

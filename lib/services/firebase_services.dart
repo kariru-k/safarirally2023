@@ -15,4 +15,8 @@ class FirebaseServices {
     return maps.snapshots();
   }
 
+  getMapDetails(id){
+    return maps.where("name", isEqualTo: id).snapshots();
+  }
+
 }

@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
 import 'package:safarirally2023/providers/auth_provider.dart';
+import 'package:safarirally2023/providers/location_provider.dart';
 import 'package:safarirally2023/screens/main_screen.dart';
 import 'package:safarirally2023/screens/login_screen.dart';
 import 'package:safarirally2023/screens/register_screen.dart';
 import 'package:safarirally2023/screens/splash_screen.dart';
+import 'package:safarirally2023/widgets/map_widget.dart';
 import 'firebase_options.dart';
 import 'screens/reset_password_screen.dart';
 
@@ -16,7 +18,8 @@ void main() async{
   runApp(
       MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => AuthProvider())
+            ChangeNotifierProvider(create: (_) => AuthProvider()),
+            ChangeNotifierProvider(create: (_) => LocationProvider())
           ],
           child: const MyApp())
   );
@@ -43,6 +46,7 @@ class MyApp extends StatelessWidget {
         LoginScreen.id:(context) => const LoginScreen(),
         RegisterScreen.id:(context) => const RegisterScreen(),
         ResetPassword.id:(context) => const ResetPassword(),
+        RallyStageMap.id:(context) => const RallyStageMap(stage: null),
       },
     );
   }

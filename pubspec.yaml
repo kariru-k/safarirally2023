@@ -26,6 +26,8 @@ dependencies:
   flutter_timer_countdown:
   cached_network_image:
   table_calendar:
+  google_maps_flutter:
+  flutter_spinkit: ^5.1.0
 
 dev_dependencies:
   flutter_test:
