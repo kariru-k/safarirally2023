@@ -1,25 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
-import 'package:safarirally2023/widgets/map_widget.dart';
 
-class MapSelectionWidget extends StatefulWidget {
-  const MapSelectionWidget({Key? key}) : super(key: key);
+class FormSelectionWidget extends StatefulWidget {
+  const FormSelectionWidget({Key? key}) : super(key: key);
 
   @override
-  State<MapSelectionWidget> createState() => _MapSelectionWidgetState();
+  State<FormSelectionWidget> createState() => _FormSelectionWidgetState();
 }
 
-class _MapSelectionWidgetState extends State<MapSelectionWidget> {
+class _FormSelectionWidgetState extends State<FormSelectionWidget> {
   @override
   Widget build(BuildContext context) {
 
     final FirebaseServices firebaseServices = FirebaseServices();
 
     return StreamBuilder<QuerySnapshot>(
-        stream: firebaseServices.getMaps(),
+        stream: firebaseServices.getForms(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot>snapshot){
+
+
           if(!snapshot.hasData) {
             return const Center(
               child: SizedBox(
@@ -38,14 +38,11 @@ class _MapSelectionWidgetState extends State<MapSelectionWidget> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: snapshot.data!.docs.map((DocumentSnapshot document){
+
+
                       return InkWell(
                         onTap: (){
-                          PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
-                            context,
-                            screen: RallyStageMap(stage: document.id,),
-                            withNavBar: false,
-                            settings: const RouteSettings(name: RallyStageMap.id),
-                          );
+                          print(document.id);
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
@@ -57,7 +54,7 @@ class _MapSelectionWidgetState extends State<MapSelectionWidget> {
                                 SizedBox(
                                   height: 200,
                                   child: Card(
-                                    elevation: 8,
+                                      elevation: 8,
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.circular(4.0),
                                         child: Image.network(

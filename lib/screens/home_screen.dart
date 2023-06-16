@@ -79,6 +79,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               const SizedBox(height: 10,),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text(
+                  "Pick the Stage to show the map and add toilet and litter area locations",
+                  style: TextStyle(
+                      fontWeight: FontWeight.w200,
+                      fontFamily: "sans-serif-light",
+                      fontSize: 16
+                  ),
+                ),
+              ),
               const SizedBox(
                   height: 250,
                   child: MapSelectionWidget()

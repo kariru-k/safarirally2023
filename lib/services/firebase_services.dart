@@ -5,6 +5,7 @@ class FirebaseServices {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   CollectionReference maps = FirebaseFirestore.instance.collection("maps");
+  CollectionReference marshallReports = FirebaseFirestore.instance.collection("marshallreports");
 
   Future<DocumentSnapshot>validateUser(id) async {
     DocumentSnapshot result = await users.doc(id).get();
@@ -13,6 +14,10 @@ class FirebaseServices {
 
   getMaps(){
     return maps.snapshots();
+  }
+
+  getForms(){
+    return marshallReports.snapshots();
   }
 
   getMapDetails(id){
