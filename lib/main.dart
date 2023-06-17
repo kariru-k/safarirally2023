@@ -6,6 +6,8 @@ import 'package:safarirally2023/providers/auth_provider.dart';
 import 'package:safarirally2023/providers/location_provider.dart';
 import 'package:safarirally2023/screens/main_screen.dart';
 import 'package:safarirally2023/screens/login_screen.dart';
+import 'package:safarirally2023/screens/marshall_form.dart';
+import 'package:safarirally2023/screens/marshall_form_screens.dart';
 import 'package:safarirally2023/screens/register_screen.dart';
 import 'package:safarirally2023/screens/splash_screen.dart';
 import 'package:safarirally2023/widgets/map_widget.dart';
@@ -47,6 +49,8 @@ class MyApp extends StatelessWidget {
         RegisterScreen.id:(context) => const RegisterScreen(),
         ResetPassword.id:(context) => const ResetPassword(),
         RallyStageMap.id:(context) => const RallyStageMap(stage: null),
+        MarshallForm.id:(context) => const MarshallForm(report: null),
+        MarshallForms.id:(context) => const MarshallForms(),
       },
     );
   }

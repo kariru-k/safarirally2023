@@ -9,7 +9,6 @@ import 'package:group_button/group_button.dart';
 import 'package:provider/provider.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
 
-import '../providers/auth_provider.dart';
 import '../providers/location_provider.dart';
 
 class RallyStageMap extends StatefulWidget {
@@ -29,13 +28,10 @@ class _RallyStageMapState extends State<RallyStageMap> {
   Widget build(BuildContext context) {
 
     final LocationProvider locationData = Provider.of<LocationProvider>(context);
-    final authData = Provider.of<AuthProvider>(context);
-    late LatLng currentLocation;
     String? toiletType;
 
 
     setState(() {
-      currentLocation = LatLng(authData.userLatitude as double, authData.userLongitude as double);
     });
 
     void onCreated(GoogleMapController controller) {

@@ -6,9 +6,16 @@ class FirebaseServices {
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   CollectionReference maps = FirebaseFirestore.instance.collection("maps");
   CollectionReference marshallReports = FirebaseFirestore.instance.collection("marshallreports");
+  List<String> stages = [];
+  String? userName;
 
   Future<DocumentSnapshot>validateUser(id) async {
     DocumentSnapshot result = await users.doc(id).get();
+    return result;
+  }
+
+  Future<DocumentSnapshot> getUserName() async{
+    DocumentSnapshot result = await users.doc(user!.email).get();
     return result;
   }
 
@@ -65,7 +72,6 @@ class FirebaseServices {
     return result;
   }
 
-
   Future<void>deleteToiletLocation({documentId, type, timestamp, location}){
     final docRef = maps.doc(documentId);
     // Remove the 'capital' field from the document
@@ -83,7 +89,15 @@ class FirebaseServices {
     return result;
   }
 
+  Future<void>addStageReport(documentId, data){
 
+    var result = marshallReports.doc(documentId).collection(data["Stage Name"]).add(data);
+    return result;
+  }
 
+  Future<void>addOtherReport(documentId, data){
+    var result = marshallReports.doc(documentId).collection("${data['Submitted By']}_${DateTime.now().day}_${DateTime.now().hour}_${DateTime.now().minute}").add(data);
+    return result;
+  }
 
 }

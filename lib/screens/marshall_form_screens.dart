@@ -3,6 +3,7 @@ import 'package:safarirally2023/widgets/form_selection_widget.dart';
 
 
 class MarshallForms extends StatefulWidget {
+  static const String id = "marshall-forms";
   const MarshallForms({Key? key}) : super(key: key);
 
   @override

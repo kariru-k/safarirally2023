@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:safarirally2023/screens/marshall_form.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
 
 class FormSelectionWidget extends StatefulWidget {
@@ -38,11 +40,14 @@ class _FormSelectionWidgetState extends State<FormSelectionWidget> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: snapshot.data!.docs.map((DocumentSnapshot document){
-
-
                       return InkWell(
                         onTap: (){
-                          print(document.id);
+                          PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
+                            context,
+                            screen: MarshallForm(report: document.id,),
+                            withNavBar: false,
+                            settings: const RouteSettings(name: MarshallForm.id),
+                          );
                         },
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),

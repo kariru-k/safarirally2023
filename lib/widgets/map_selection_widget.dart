@@ -38,6 +38,9 @@ class _MapSelectionWidgetState extends State<MapSelectionWidget> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: snapshot.data!.docs.map((DocumentSnapshot document){
+
+                      firebaseServices.stages.add(document.id);
+
                       return InkWell(
                         onTap: (){
                           PersistentNavBarNavigator.pushNewScreenWithRouteSettings(

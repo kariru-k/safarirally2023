@@ -113,6 +113,14 @@ class AuthProvider extends ChangeNotifier {
           email: email,
           password: password
       );
+      DocumentReference users = FirebaseFirestore.instance
+          .collection("users")
+          .doc(email);
+
+      users.update({
+        'location': GeoPoint(userLatitude != null ? userLatitude! : 0.0, userLongitude != null ? userLongitude! : 0.0),
+      });
+
     } on FirebaseAuthException catch (e) {
       error = e.code;
       notifyListeners();
