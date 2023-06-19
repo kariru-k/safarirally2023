@@ -1,8 +1,11 @@
-
+import 'dart:convert';
+import 'dart:developer';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:safarirally2023/models/steps.dart';
 import 'package:safarirally2023/screens/marshall_form_screens.dart';
+import 'package:safarirally2023/secrets.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
 import 'package:survey_kit/survey_kit.dart';
 
@@ -38,6 +41,7 @@ class _FormWidgetState extends State<FormWidget> {
   Widget build(BuildContext context) {
 
     Steps steps = Steps();
+    Secrets secrets = Secrets();
 
     final Map<String,dynamic> reportData = {
       "Submitted By": userName,
@@ -221,6 +225,55 @@ class _FormWidgetState extends State<FormWidget> {
       }
     }
 
+    sendNotificationToAdmin() async {
+      //Our API Key
+      var serverKey = secrets.apiKey;
+
+      //Get our Admin token from Firesetore DB
+      var token = [];
+      await firebaseServices.getUsers().then((value){
+        for(var item in value.docs){
+          token.add(item.get("token"));
+        }
+      });
+
+      //Create Message with Notification Payload
+      String constructFCMPayload(String token) {
+        return jsonEncode(
+          <String, dynamic>{
+            'notification': <String, dynamic>{
+              'body': "$userName submitted a new report into ${widget.report}",
+              'title': "Update to ${widget.report}",
+            },
+            'data': <String, dynamic>{
+
+            },
+            'to': token
+          },
+        );
+      }
+
+      for (var item in token){
+        if (item.isEmpty) {
+          return log('Unable to send FCM message, no token exists.');
+        }
+        try {
+          //Send  Message
+          http.Response response =
+          await http.post(Uri.parse('https://fcm.googleapis.com/fcm/send'),
+              headers: <String, String>{
+                'Content-Type': 'application/json',
+                'Authorization': 'key=$serverKey',
+              },
+              body: constructFCMPayload(item));
+
+          log("status: ${response.statusCode} | Message Sent Successfully!");
+        } catch (e) {
+          log("error push notification $e");
+        }
+      }
+    }
+
 
     Widget formReturn(){
       if(widget.report != "Noise Test Reports"){
@@ -250,6 +303,7 @@ class _FormWidgetState extends State<FormWidget> {
                     withNavBar: false,
                     settings: const RouteSettings(name: MarshallForms.id),
                   );
+                  sendNotificationToAdmin();
                 });
               } else {
                 for (var result in jsonResult){
@@ -258,7 +312,6 @@ class _FormWidgetState extends State<FormWidget> {
                   }.entries);
                 }
 
-                print(reportData);
 
                 firebaseServices.addOtherReport(widget.report, reportData).then((value){
                   PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
@@ -267,6 +320,7 @@ class _FormWidgetState extends State<FormWidget> {
                     withNavBar: false,
                     settings: const RouteSettings(name: MarshallForms.id),
                   );
+                  sendNotificationToAdmin();
                 });
               }
             }

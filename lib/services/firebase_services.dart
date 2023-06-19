@@ -19,8 +19,18 @@ class FirebaseServices {
     return result;
   }
 
+
+
   getMaps(){
     return maps.snapshots();
+  }
+
+  Future<QuerySnapshot<Object?>> getUsers() async{
+    var result = await users.get();
+    for (var item in result.docs){
+      print(item.get("token"));
+    }
+    return result;
   }
 
   getForms(){
@@ -97,6 +107,11 @@ class FirebaseServices {
 
   Future<void>addOtherReport(documentId, data){
     var result = marshallReports.doc(documentId).collection("${data['Submitted By']}_${DateTime.now().day}_${DateTime.now().hour}_${DateTime.now().minute}").add(data);
+    return result;
+  }
+
+  Future<void>addNoiseTestData(data){
+    var result = marshallReports.doc("Noise Test Reports").collection("Reports").add(data);
     return result;
   }
 

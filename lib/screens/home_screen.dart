@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:safarirally2023/services/firebase_services.dart';
 import 'package:safarirally2023/widgets/map_selection_widget.dart';
 import 'package:safarirally2023/widgets/schedule_widget.dart';
 
@@ -20,11 +22,17 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   int _currentColorIndex = 0;
   late Timer _timer;
+  FirebaseServices services = FirebaseServices();
 
   @override
   void initState() {
     super.initState();
     _startTimer();
+    FirebaseMessaging.instance.getToken().then((token){
+      services.users.doc(services.user!.email).update({
+        "token": token
+      });
+    });
   }
 
   // Start the timer
@@ -48,6 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+    services.getUsers();
+
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
