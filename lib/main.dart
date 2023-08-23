@@ -1,5 +1,4 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:provider/provider.dart';
@@ -12,23 +11,16 @@ import 'package:safarirally2023/screens/marshall_form_screens.dart';
 import 'package:safarirally2023/screens/register_screen.dart';
 import 'package:safarirally2023/screens/splash_screen.dart';
 import 'package:safarirally2023/widgets/map_widget.dart';
+import 'package:safarirally2023/screens/reporting_tool.dart';
 import 'firebase_options.dart';
 import 'screens/reset_password_screen.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  final messaging = FirebaseMessaging.instance;
 
-  final settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
+
+
 
   runApp(
       MultiProvider(
@@ -64,6 +56,7 @@ class MyApp extends StatelessWidget {
         RallyStageMap.id:(context) => const RallyStageMap(stage: null),
         MarshallForm.id:(context) => const MarshallForm(report: null),
         MarshallForms.id:(context) => const MarshallForms(),
+        ReportingTool.id:(context) => const ReportingTool(),
       },
     );
   }

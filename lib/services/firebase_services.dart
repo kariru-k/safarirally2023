@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseServices {
   User? user = FirebaseAuth.instance.currentUser;
   CollectionReference users = FirebaseFirestore.instance.collection("users");
   CollectionReference maps = FirebaseFirestore.instance.collection("maps");
   CollectionReference marshallReports = FirebaseFirestore.instance.collection("marshallreports");
+  CollectionReference reports = FirebaseFirestore.instance.collection("reports");
   List<String> stages = [];
   String? userName;
 
@@ -28,7 +32,6 @@ class FirebaseServices {
   Future<QuerySnapshot<Object?>> getUsers() async{
     var result = await users.get();
     for (var item in result.docs){
-      print(item.get("token"));
     }
     return result;
   }
@@ -112,6 +115,34 @@ class FirebaseServices {
 
   Future<void>addNoiseTestData(data){
     var result = marshallReports.doc("Noise Test Reports").collection("Reports").add(data);
+    return result;
+  }
+
+  Future<String?>uploadShopPicFile(filePath) async {
+    var dateTime = DateTime.now().millisecondsSinceEpoch;
+    File file = File(filePath);
+    FirebaseStorage storage = FirebaseStorage.instance;
+    try {
+      await storage
+          .ref("uploads/reportimages/${dateTime.toString()}").putFile(file);
+    } on FirebaseException {
+    }
+    String downloadUrl = await storage
+        .ref("uploads/reportimages/${dateTime.toString()}")
+        .getDownloadURL();
+
+    return downloadUrl;
+  }
+
+  Future<void>addCommentReport({url, comment, submitter, location, area}){
+    var result = reports.add({
+      "image": url,
+      "comment": comment,
+      "submitted by": submitter,
+      "location": location,
+      "area": area,
+      "time": DateTime.now()
+    });
     return result;
   }
 

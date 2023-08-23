@@ -2,7 +2,7 @@
     <application
         android:label="Safari Rally Environment Application"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/safari_rally_logo">
 
         <meta-data android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBCjRmIh_3bSs2kmfRKUUxOM7BBB9BSKuQ"/>

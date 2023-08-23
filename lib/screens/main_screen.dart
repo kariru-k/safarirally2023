@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:safarirally2023/screens/contractor_form_screen.dart';
 import 'package:safarirally2023/screens/marshall_form_screens.dart';
+import 'package:safarirally2023/screens/reports_screen.dart';
 
 import 'home_screen.dart';
 
@@ -20,8 +21,9 @@ class MainScreen extends StatelessWidget {
     List<Widget> buildScreens() {
       return [
         const HomeScreen(),
+        const ReportScreen(),
         const MarshallForms(),
-        const ContractorForms()
+        const ContractorForms(),
       ];
     }
 
@@ -34,6 +36,12 @@ class MainScreen extends StatelessWidget {
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),
         PersistentBottomNavBarItem(
+          icon: const Icon(CupertinoIcons.doc_on_clipboard),
+          title: ("Reports"),
+          activeColorPrimary: Theme.of(context).primaryColor,
+          inactiveColorPrimary: CupertinoColors.systemGrey,
+        ),
+        PersistentBottomNavBarItem(
           icon: const Icon(Icons.engineering_sharp),
           title: ("Marshall Forms"),
           activeColorPrimary: Theme.of(context).primaryColor,
@@ -41,7 +49,7 @@ class MainScreen extends StatelessWidget {
         ),
         PersistentBottomNavBarItem(
           icon: const Icon(Icons.delivery_dining_outlined),
-          title: ("Contractor Forms"),
+          title: ("Deployment Form"),
           activeColorPrimary: Theme.of(context).primaryColor,
           inactiveColorPrimary: CupertinoColors.systemGrey,
         ),

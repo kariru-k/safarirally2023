@@ -1,21 +1,27 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:provider/provider.dart';
 import 'package:safarirally2023/services/firebase_services.dart';
+import 'package:widget_zoom/widget_zoom.dart';
+import '../providers/auth_provider.dart';
 
-class ContractorForms extends StatefulWidget {
-  const ContractorForms({Key? key}) : super(key: key);
+
+class ReportingTool extends StatefulWidget {
+  static const String id = "reporting-tool";
+  const ReportingTool({Key? key}) : super(key: key);
 
   @override
-  State<ContractorForms> createState() => _ContractorFormsState();
+  State<ReportingTool> createState() => _ReportingToolState();
 }
 
-class _ContractorFormsState extends State<ContractorForms> {
-
+class _ReportingToolState extends State<ReportingTool> {
   late Timer _timer;
-
+  File? _image;
   final List _colors = [
     Colors.lightBlueAccent,
     Colors.lightGreenAccent,
@@ -23,6 +29,9 @@ class _ContractorFormsState extends State<ContractorForms> {
   ];
   int _currentColorIndex = 0;
   final _formKey = GlobalKey<FormState>();
+  final _comment = TextEditingController();
+  User? user = FirebaseAuth.instance.currentUser;
+
 
   @override
   void initState() {
@@ -30,6 +39,7 @@ class _ContractorFormsState extends State<ContractorForms> {
     _startTimer();
   }
 
+  // Start the timer
   void _startTimer() {
     // Set up a periodic timer that triggers the color change every 3 seconds
     _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
@@ -58,7 +68,7 @@ class _ContractorFormsState extends State<ContractorForms> {
       const DropdownMenuItem(value: "Elementaita", child: Text("Elementaita")),
       const DropdownMenuItem(value: "Sleeping Warrior", child: Text("Sleeping Warrior")),
       const DropdownMenuItem(value: "Oserian", child: Text("Oserian")),
-      const DropdownMenuItem(value: "Malewa", child: Text("Narasha")),
+      const DropdownMenuItem(value: "Narasha", child: Text("Narasha")),
       const DropdownMenuItem(value: "Hell's Gate", child: Text("Hell's Gate")),
       const DropdownMenuItem(value: "Refuelling", child: Text("Refuelling")),
       const DropdownMenuItem(value: "Car Wash", child: Text("Car Wash")),
@@ -72,13 +82,10 @@ class _ContractorFormsState extends State<ContractorForms> {
   @override
   Widget build(BuildContext context) {
 
-    String? area;
-    int? vipToilets;
-    int? regularToilets;
-    int? disabledToilets;
-
+    final authData = Provider.of<AuthProvider>(context);
     FirebaseServices services = FirebaseServices();
     String? name;
+    String? area;
 
     services.getUserName().then((value){
       name = value["name"];
@@ -127,7 +134,7 @@ class _ContractorFormsState extends State<ContractorForms> {
                             const SizedBox(height: 10,),
                             const FittedBox(
                               child: Text(
-                                "Contractor Deployment Form",
+                                "Real Time Reporting Tool",
                                 style: TextStyle(
                                     fontFamily: "Anton",
                                     fontWeight: FontWeight.bold,
@@ -136,6 +143,42 @@ class _ContractorFormsState extends State<ContractorForms> {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      const SizedBox(height: 20,),
+                      Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: InkWell(
+                          onTap: (){
+                            authData.getImageFromCamera().then((image){
+                              setState(() {
+                                _image = image;
+                              });
+                              if(image != null){
+                                authData.picture = true;
+                              }
+                            });
+                          },
+                          child: SizedBox(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width,
+                            child: Card(
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(4.0),
+                                child: _image == null ? const Center(
+                                    child: Text(
+                                      "Take a Picture by pressing this button",
+                                      style: TextStyle(
+                                          color: Colors.grey
+                                      ),
+                                    )
+                                ) : WidgetZoom(
+                                  zoomWidget: Image.file(_image!, fit: BoxFit.fill,),
+                                  heroAnimationTag: "Image",
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20,),
@@ -159,14 +202,14 @@ class _ContractorFormsState extends State<ContractorForms> {
                               )
                           ),
                           contentPadding: EdgeInsets.zero,
-                          labelText: "Deployment Area",
+                          labelText: "Area of Concern",
                           prefixIcon: const Icon(Icons.category),
                         ),
                         value: area,
                         items: dropDownItems,
                         validator: (value) {
                           if (value == null) {
-                            return 'Please select a deployment area';
+                            return 'Please select a rally category';
                           }
                           setState(() {
                             area = value;
@@ -180,123 +223,49 @@ class _ContractorFormsState extends State<ContractorForms> {
                         },
                       ),
                       const SizedBox(height: 20,),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  width: 2,
-                                  color: Colors.redAccent
-                              ),
-                            ),
-                            focusColor: Theme.of(context).primaryColor,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
+                      Container(
+                        color: Colors.white,
+                        height: 200,
+                        child: TextFormField(
+                          controller: _comment,
+                          maxLines: null,
+                          expands: true,
+                          textAlignVertical: TextAlignVertical.top,
+                          keyboardType: TextInputType.multiline,
+                          validator: (value){
+                            if(value!.isEmpty){
+                              return "You forgot to add a description of your report";
+                            }
+                            setState(() {
+                              _comment.text = value;
+                            });
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                              fillColor: Colors.black,
+                              enabledBorder: const OutlineInputBorder(),
+                              errorBorder: const OutlineInputBorder(
                                 borderSide: BorderSide(
                                     style: BorderStyle.solid,
                                     width: 2,
-                                    color: Colors.pinkAccent.shade700
-                                )
-                            ),
-                            contentPadding: EdgeInsets.zero,
-                            labelText: "Number of VIP toilets delivered",
-                            prefixIcon: const Icon(Icons.spa_sharp)
+                                    color: Colors.redAccent
+                                ),
+                              ),
+                              focusColor: Theme.of(context).primaryColor,
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderSide: BorderSide(
+                                      style: BorderStyle.solid,
+                                      width: 2,
+                                      color: Colors.pinkAccent.shade700
+                                  )
+                              ),
+                              labelText: "Describe the Issue/ Comment",
+                              contentPadding: const EdgeInsets.all(10.0),
+                          ),
                         ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter the number of VIP toilets';
-                          }
-                          // check if the value is an integer
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          vipToilets = int.parse(value!);
-                        },
                       ),
                       const SizedBox(height: 20,),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  width: 2,
-                                  color: Colors.redAccent
-                              ),
-                            ),
-                            focusColor: Theme.of(context).primaryColor,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    width: 2,
-                                    color: Colors.pinkAccent.shade700
-                                )
-                            ),
-                            contentPadding: EdgeInsets.zero,
-                            labelText: "Number of Regular Toilets Delivered",
-                            prefixIcon: const Icon(Icons.wc_sharp)
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter the number of Regular toilets';
-                          }
-                          // check if the value is an integer
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          regularToilets = int.parse(value!);
-                        },
-                      ),
-                      const SizedBox(height: 20,),
-                      TextFormField(
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  style: BorderStyle.solid,
-                                  width: 2,
-                                  color: Colors.redAccent
-                              ),
-                            ),
-                            focusColor: Theme.of(context).primaryColor,
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0),
-                                borderSide: BorderSide(
-                                    style: BorderStyle.solid,
-                                    width: 2,
-                                    color: Colors.pinkAccent.shade700
-                                )
-                            ),
-                            contentPadding: EdgeInsets.zero,
-                            labelText: "Number of Disabled toilets delivered",
-                            prefixIcon: const Icon(Icons.wheelchair_pickup)
-                        ),
-                        keyboardType: TextInputType.number,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return 'Please enter the number of Disabled toilets';
-                          }
-                          // check if the value is an integer
-                          if (int.tryParse(value) == null) {
-                            return 'Please enter a valid number';
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          disabledToilets = int.parse(value!);
-                        },
-                      ),
-                      const SizedBox(height: 30,),
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
@@ -306,16 +275,26 @@ class _ContractorFormsState extends State<ContractorForms> {
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
                               EasyLoading.show(status: "Waiting", indicator: const CircularProgressIndicator());
-                              FirebaseFirestore.instance.collection("deployment").add({
-                                "Stage": area,
-                                "Number of Vip Toilets": vipToilets,
-                                "Number of Regular Toilets": regularToilets,
-                                "Number of Disabled Toilets": disabledToilets,
-                                "timestamp": DateTime.now(),
-                                "Submitted By": name
-                              });
-                              _formKey.currentState?.reset();
-                              EasyLoading.showSuccess("Successfully added");
+                              if(authData.picture == true){
+                                services.uploadShopPicFile(authData.image!.path).then((url){
+                                  if(url != null){
+                                    services.addCommentReport(
+                                      url: url,
+                                      comment: _comment.text,
+                                      submitter: name,
+                                      area: area,
+                                      location: GeoPoint(authData.userLatitude as double, authData.userLongitude as double)
+                                    ).then((value){
+                                      EasyLoading.showSuccess("Your report has been added successfully");
+                                      Navigator.pop(context);
+                                    });
+                                  } else {
+                                    EasyLoading.showError("Please add an Image for easier clarification");
+                                  }
+                                });
+                              } else {
+                                EasyLoading.showError("Please add an Image for easier clarification");
+                              }
                             }
                           },
                           child: const Text(

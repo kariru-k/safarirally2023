@@ -9,8 +9,7 @@ import 'package:geolocator/geolocator.dart';
 class AuthProvider extends ChangeNotifier {
 
   late File? image;
-  bool isShopPicAvailable = false;
-  bool isOwnerPicAvailable = false;
+  bool picture = false;
   final picker = ImagePicker();
   String? pickererror;
   double? userLatitude;

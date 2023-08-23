@@ -730,7 +730,7 @@ class _NoiseTestFormState extends State<NoiseTestForm> {
                                 PersistentNavBarNavigator.pushNewScreenWithRouteSettings(
                                   context,
                                   screen: const MarshallForms(),
-                                  withNavBar: false,
+                                  withNavBar: true,
                                   settings: const RouteSettings(name: MarshallForms.id),
                                 );
                               });

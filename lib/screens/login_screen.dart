@@ -227,6 +227,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           onPressed: () {
                             if(_formKey.currentState!.validate()){
+                              EasyLoading.show(status: "Waiting...");
                               services.validateUser(_emailTextController.text).then((value){
                                 if (value.exists) {
                                   EasyLoading.show(status: "Please Wait");
